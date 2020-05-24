@@ -20,7 +20,7 @@ func scanAndPrint(in *os.File, uncheckFieldSize bool, pretty bool, emptyFillStri
 	}
 	blankRegex := regexp.MustCompile("^\\s*$")
 	prettyPrefixRegex := regexp.MustCompile("^\\s+(.+)$")
-	prettySuffixRegex := regexp.MustCompile("^(.+)\\s+$")
+	prettySuffixRegex := regexp.MustCompile("^(.+?)\\s+$")
 
 	for {
 		record, err := reader.Read()
