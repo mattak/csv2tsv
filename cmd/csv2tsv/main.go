@@ -78,7 +78,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "csv2tsv"
 	app.Usage = "convert csv to tsv"
-	app.Version = "1.0.0"
+	app.Version = "1.1.0"
 	app.ArgsUsage = "[csv_file]?"
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
