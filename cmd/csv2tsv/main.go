@@ -10,10 +10,13 @@ import (
 	"strings"
 )
 
-func scanAndPrint(in *os.File) error {
+func scanAndPrint(in *os.File, force bool) error {
 	reader := csv.NewReader(in)
 	reader.LazyQuotes = true
 	reader.Comma = ','
+	if force {
+		reader.FieldsPerRecord = -1
+	}
 
 	for {
 		record, err := reader.Read()
@@ -35,8 +38,10 @@ func scanAndPrint(in *os.File) error {
 }
 
 func run(c *cli.Context) error {
+	force := c.Bool("force")
+
 	if c.NArg() < 1 {
-		return scanAndPrint(os.Stdin)
+		return scanAndPrint(os.Stdin, force)
 	}
 
 	filepath := c.Args().Get(0)
@@ -46,8 +51,7 @@ func run(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-
-	return scanAndPrint(in)
+	return scanAndPrint(in, force)
 }
 
 func main() {
@@ -56,6 +60,15 @@ func main() {
 	app.Usage = "convert csv to tsv"
 	app.Version = "1.0.0"
 	app.ArgsUsage = "[csv_file]?"
+	app.Flags = []cli.Flag{
+		&cli.BoolFlag{
+			Name:     "force",
+			Aliases:  []string{"f"},
+			Usage:    "force skip checking each column size",
+			Value:    false,
+			Required: false,
+		},
+	}
 
 	app.Action = func(c *cli.Context) error {
 		return run(c)
